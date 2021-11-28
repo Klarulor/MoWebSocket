@@ -1,5 +1,5 @@
-export * from "./MyWebSocketClient"
-export * from "./MyWebSocketServer"
-export * from "./Types/types"
-export * from "./features/MyRequestMessage"
-export * from "./interfaces/IMyMessage"
+exports.MyWebSocketClient = require(`./MyWebSocketClient`);
+exports.MyWebSocketServer = require(`./MyWebSocketServer`);
+exports.IMyMessage = require("./interfaces/IMyMessage");
+exports.MyRequestMessage = require(`./features/MyRequestMessage`);
+exports.Types = require(`./Types/types`);
