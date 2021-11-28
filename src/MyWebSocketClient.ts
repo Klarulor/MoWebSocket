@@ -7,9 +7,11 @@ const crypto = require(`crypto`);
 export class MyWebSocketClient{
     public address: string;
     public name: string;
-    constructor(name: string, address: string){
+    public autoReconnect: boolean = false;
+    constructor(name: string, address: string, autoReconnect: boolean = false){
         this.name = name;
         this.address = address;
+        this.autoReconnect = autoReconnect;
     }
     public funcOnClose: any;
     public OnClose(func: any){
@@ -29,6 +31,11 @@ export class MyWebSocketClient{
                 //console.log("Connection Error: " + error.toString());
             });
             connection.on('close', function() {
+                if(instance.autoReconnect){
+                    setTimeout(() => {
+                        instance.connect(callback);
+                    }, 100);
+                }
                 if(instance.funcOnClose != undefined) instance.funcOnClose();
             });
             connection.on('message', function(message) {

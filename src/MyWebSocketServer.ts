@@ -12,7 +12,7 @@ export class MyWebSocketServer {
         response.writeHead(404);
         response.end();
     });
-    private wsServer;
+    private wsServer: any;
     constructor(port: number, ip?: string) {
         this.ip = ip;
         this.port = port;
