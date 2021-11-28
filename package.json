@@ -1,7 +1,11 @@
 {
   "name": "mowebsocket",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "Luchaka websocket",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Klarulor/MoWebSocket.git"
