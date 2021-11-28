@@ -1,0 +1,27 @@
+{
+  "name": "mowebsocket",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Klarulor/MoWebSocket.git"
+  },
+  "author": "Klarulor",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Klarulor/MoWebSocket/issues"
+  },
+  "homepage": "https://github.com/Klarulor/MoWebSocket#readme",
+  "dependencies": {
+    "@types/node": "^16.11.10",
+    "@types/ws": "^8.2.0",
+    "crypto": "^1.0.1",
+    "discord.js": "^13.3.1",
+    "http": "^0.0.1-security",
+    "websocket": "^1.0.34"
+  }
+}
