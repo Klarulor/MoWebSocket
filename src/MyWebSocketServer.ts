@@ -78,8 +78,12 @@ export class MyWebSocketServer {
         else this.subscribers.push({key, action});
     }
     private reqMessages: [{message: IMyMessage, func: any}]
+    public cointainsClient(name: string): boolean{
+        return this.connections.filter(x => x.id.split('=')[0] == name).length > 0;
+    }
     private onMessage(connection: { connection, id: string }, message: IMyMessage){
         if(message.messageType == "req"){
+            //console.log(this.subscribers)
             let filtered = this.subscribers.filter(x => x.key == message.key);
             if(filtered.length > 0){
                 let reqMessage: MyRequestMessage = new MyRequestMessage(this, message.content, connection.connection, connection.id, message.key, message.id);
@@ -120,7 +124,7 @@ export class MyWebSocketServer {
                     let con = this.connections.filter(x => x.id.split("=")[0] == client)[0];
                     con.connection.sendUTF(JSON.stringify(message));
                 }
-            })
+            }, 100)
         });
     }
     private static md5(data: string): string {
