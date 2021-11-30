@@ -78,9 +78,6 @@ export class MyWebSocketServer {
         else this.subscribers.push({key, action});
     }
     private reqMessages: [{message: IMyMessage, func: any}]
-    public cointainsClient(name: string): boolean{
-        return this.connections.filter(x => x.id.split('=')[0] == name).length > 0;
-    }
     private onMessage(connection: { connection, id: string }, message: IMyMessage){
         if(message.messageType == "req"){
             //console.log(this.subscribers)
@@ -109,6 +106,7 @@ export class MyWebSocketServer {
     }
     public get<T>(client: T | string, key: string, content: string): Promise<string> {
         return new Promise(res => {
+            setTimeout(x => res(null), 500);
             let interval = setInterval(() => {
                 if(this.connections != undefined && this.connections.filter(x => x.id.split('=')[0] == client.toString()).length > 0){
                     clearInterval(interval);

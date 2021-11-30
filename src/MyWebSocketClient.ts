@@ -79,6 +79,7 @@ export class MyWebSocketClient{
     }
     public get(key: string, content: string): Promise<string> {
         return new Promise(res => {
+            setTimeout(x => res(null), 500);
             let interval = setInterval(() => {
                 if(this.connection != null){
                     clearInterval(interval);
