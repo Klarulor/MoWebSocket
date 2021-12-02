@@ -1,5 +1,6 @@
 import { MyRequestMessage } from "./features/MyRequestMessage";
 import { IMyMessage } from "./interfaces/IMyMessage";
+import { IMyResponse } from "./interfaces/IMyResponse";
 
 var WebSocketClient = require('websocket').client;
 var client = new WebSocketClient();
@@ -63,7 +64,13 @@ export class MyWebSocketClient{
             let msgs = this.reqMessages.filter(x => x.message.id == message.id);
             if(msgs.length > 0){
                 let msg = msgs[0];
-                msg.func(message.content);
+                msg.func({success: true, content: message.content});
+            }
+        }else if(message.messageType == "send"){
+            let filtered = this.subscribers.filter(x => x.key == message.key);
+            if(filtered.length > 0){
+                let reqMessage: MyRequestMessage = new MyRequestMessage(this, message.content, undefined, undefined, message.key, message.id, true);
+                filtered.forEach(x => x.action(reqMessage))
             }
         }
     }
@@ -77,9 +84,9 @@ export class MyWebSocketClient{
         //console.log(1)
         this.connection.sendUTF(JSON.stringify(responseMessage));
     }
-    public get(key: string, content: string): Promise<string> {
+    public get(key: string, content: string): Promise<IMyResponse> {
         return new Promise(res => {
-            setTimeout(x => res(null), 500);
+            setTimeout(x => res({success: false, error: "Timeout"}), 500);
             let interval = setInterval(() => {
                 if(this.connection != null){
                     clearInterval(interval);

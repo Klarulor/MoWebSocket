@@ -1,15 +1,15 @@
 import { MyWebSocketServer } from "../MyWebSocketServer";
 
-let server: MyWebSocketServer = new MyWebSocketServer(7003);
+let server: MyWebSocketServer = new MyWebSocketServer(7004);
 server.listen(() => console.log("success"));
-server.subscribe("q", message => {
-    console.log(message.content);
+server.subscribe("test2", message => {
+    console.log(message.content, "URAAAA");
     message.res("hey");
 })
 
 
-q();
-async function q() {
-    let data = await server.get("test", "b", "idk")
-    console.log(data)
-}
+// setInterval(q, 2500)
+// async function q() {
+//     let data = await server.get("test", "s", "idk")
+//     console.log(data)
+// }

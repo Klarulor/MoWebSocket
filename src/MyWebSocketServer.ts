@@ -1,5 +1,6 @@
 import { MyRequestMessage } from "./features/MyRequestMessage";
 import { IMyMessage } from "./interfaces/IMyMessage";
+import { IMyResponse } from "./interfaces/IMyResponse";
 
 var WebSocketServer = require('websocket').server;
 var http = require('http');
@@ -37,16 +38,16 @@ export class MyWebSocketServer {
     private authChecker: (name, authKey, ip) => boolean;
     private connections: [{ connection: any, id: string }];
     private async onRequest(request) {
-        //console.log(request)
         //console.log(request.remoteAddresses)
-        var connection = request.accept('echo-protocol', request.origin);
+        var connection = request.accept();
         if(this.connections == undefined) this.connections = [{connection, id: "="+MyWebSocketServer.md5(Date.now().toString())}]
         this.connections.push({connection, id: "="+MyWebSocketServer.md5(Date.now().toString())})
         //console.log()
         connection.on('message', async msg => {
+            console.log(msg)
             let message: string = msg.utf8Data;
-            //console.log("message",message)
-            if(message.startsWith("auth=")){
+            console.log("message",message)
+            if(msg.utf8Data != undefined && message.startsWith("auth=")){
                 if(this.authChecker != undefined){
                     if(message.split("auth=")[1].split("\n").length == 0) return connection.reject();
                     for(let k in this.connections){
@@ -79,18 +80,25 @@ export class MyWebSocketServer {
     }
     private reqMessages: [{message: IMyMessage, func: any}]
     private onMessage(connection: { connection, id: string }, message: IMyMessage){
-        if(message.messageType == "req"){
-            //console.log(this.subscribers)
+        console.log("suka blyat", message)
+        if(message.messageType == "req" || message.messageType == 0){
+            console.log("subscribers:",this.subscribers)
             let filtered = this.subscribers.filter(x => x.key == message.key);
             if(filtered.length > 0){
                 let reqMessage: MyRequestMessage = new MyRequestMessage(this, message.content, connection.connection, connection.id, message.key, message.id);
                 filtered.forEach(x => x.action(reqMessage))
             }
-        }else if(message.messageType == "res"){
+        }else if(message.messageType == "res"|| message.messageType == 1){
             let msgs = this.reqMessages.filter(x => x.message.id == message.id);
             if(msgs.length > 0){
                 let msg = msgs[0];
-                msg.func(message.content);
+                msg.func({success: true, content: message.content});
+            }
+        }else if(message.messageType == "send" || message.messageType == 2){
+            let filtered = this.subscribers.filter(x => x.key == message.key);
+            if(filtered.length > 0){
+                let reqMessage: MyRequestMessage = new MyRequestMessage(this, message.content, connection.connection, connection.id, message.key, message.id, true);
+                filtered.forEach(x => x.action(reqMessage))
             }
         }
     }
@@ -104,9 +112,9 @@ export class MyWebSocketServer {
         };
         message.connection.sendUTF(JSON.stringify(responseMessage));
     }
-    public get<T>(client: T | string, key: string, content: string): Promise<string> {
+    public get<T>(client: T | string, key: string, content: string): Promise<IMyResponse> {
         return new Promise(res => {
-            setTimeout(x => res(null), 500);
+            setTimeout(x => res({success: false, error: "Timeout"}), 500);
             let interval = setInterval(() => {
                 if(this.connections != undefined && this.connections.filter(x => x.id.split('=')[0] == client.toString()).length > 0){
                     clearInterval(interval);
