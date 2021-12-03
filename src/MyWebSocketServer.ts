@@ -38,7 +38,7 @@ export class MyWebSocketServer {
     private authChecker: (name, authKey, ip) => boolean;
     private connections: [{ connection: any, id: string }];
     private async onRequest(request) {
-        //console.log(request.remoteAddresses)
+        console.log(request)
         var connection = request.accept();
         if(this.connections == undefined) this.connections = [{connection, id: "="+MyWebSocketServer.md5(Date.now().toString())}]
         this.connections.push({connection, id: "="+MyWebSocketServer.md5(Date.now().toString())})
