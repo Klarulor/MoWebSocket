@@ -32,7 +32,7 @@ export class MyWebSocketServer {
         this.wsServer.on('request', req => this.onRequest(req));
         //callback();
     }
-    public auth(action: (name, authKey, ip) => boolean): void{
+    public auth(action: (name, key, ip) => boolean): void{
         this.authChecker = action;
     }
     private authChecker: (name, authKey, ip) => boolean;
@@ -54,8 +54,8 @@ export class MyWebSocketServer {
                         if(this.connections[k].connection == connection)
                             delete this.connections[k];
                     }
-                    let key = message.split("auth=")[1].split("\n")[1];
-                    await this.authChecker(message.split("auth=")[1].split("\n")[0], key, request.remoteAddresses[0]);
+                    let key = message.split("auth=")[1].split("key=").at(1);
+                    await this.authChecker(message.split("auth=")[1], key, request.remoteAddresses[0]);
                 }
                 for(let k in this.connections){
                     if(this.connections[k].connection == connection)
