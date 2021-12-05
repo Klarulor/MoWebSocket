@@ -2,9 +2,9 @@ import { MyWebSocketServer } from "../MyWebSocketServer";
 
 let server: MyWebSocketServer = new MyWebSocketServer(7002);
 server.listen(() => console.log("success"));
-server.subscribe("test2", message => {
-    console.log(message.content, "URAAAA");
-    message.res("hey");
+server.subscribe("key", message => {
+    console.log(message.content, ": response");
+    message.res("success");
 })
 
 
