@@ -1,6 +1,6 @@
 {
   "name": "mowebsocket",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Luchaka websocket",
   "main": "src/index.ts",
   
