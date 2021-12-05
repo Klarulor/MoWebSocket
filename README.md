@@ -4,7 +4,7 @@ A wrapper over a web socket.
 
 **Server:**
 ```js
-import { MyWebSocketServer } from "../MyWebSocketServer";
+import { MyWebSocketServer } from "mowebsocket";
 
 let server: MyWebSocketServer = new MyWebSocketServer(7002);
 server.listen(() => console.log("success"));
@@ -16,7 +16,7 @@ server.subscribe("key", message => {
 
 **Client:**
 ```ts
-import { MyWebSocketClient } from "../MyWebSocketClient";
+import { MyWebSocketClient } from "mowebsocket";
 
 let client: MyWebSocketClient = new MyWebSocketClient("test", "localhost:8002");
 client.connect(() => console.log("success"));
