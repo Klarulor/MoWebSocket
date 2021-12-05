@@ -22,11 +22,11 @@ export class MyWebSocketClient{
     public connect(callback: any): void{
         let instance: MyWebSocketClient = this;
         //console.log(instance.address)
-        client.connect(`ws://${instance.address}/`, 'echo-protocol');
+        client.connect(`ws://${instance.address}/`);
         client.on('connect', function(connection) {
             callback();
-            connection.sendUTF("auth="+instance.name);
-            //console.log('WebSocket Client Connected');
+            setTimeout(() => connection.sendUTF("auth="+instance.name), 100)
+            console.log('WebSocket Client Connected');
             instance.connection = connection;
             connection.on('error', function(error) {
                 //console.log("Connection Error: " + error.toString());
